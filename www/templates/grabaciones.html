@@ -1,0 +1,36 @@
+<ion-view title="Grabaciones" id="page4" >
+    <ion-content padding="true" class="has-header">
+        <div class="list list-inset">
+            <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="Buscar" ng-model="buscar">
+            </label>
+        </div>
+
+        <button  id="grabarAudio-button7" class="button button-assertive  button-block" >Listado de Grabaciones</button> 
+
+
+
+         <div class="list card" ng-repeat="f in files | filter:myFilter">
+ 
+          <div class="item item-avatar">
+            <img src="img/wave.png">
+            <h2>{{f.name}}</h2>
+            <p>Rock</p>
+          </div>
+ 
+          <div class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item" href="#" ng-click="playRecordedAudio(f.name)">
+              <i class="icon ion-ios-play"></i>
+              Play
+            </a>
+            <a class="tab-item" href="#" ng-click="deleteRecordedAudio()">
+              <i class="icon ion-android-checkbox-blank"></i>
+              Stop
+            </a>
+          </div>
+ 
+        </div>
+ 
+    </ion-content>
+</ion-view>

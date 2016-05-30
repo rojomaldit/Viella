@@ -1,0 +1,24 @@
+<ion-view title="Grabar Audio" id="page3">
+    <ion-content padding="true" class="has-header">
+        <div>
+            <img src="img/hHr91UeRGHIXKNrh82Ab_record.jpg" width="100%" height="170" style="display: block; margin-left: auto; margin-right: auto;">
+        </div>
+        <form class="list">
+            <ion-item class="range range-positive">
+                <i class = "icon ion-volume-low"></i>
+                <input type="range" value="50" min="0" max="100">
+                <i class = "icon ion-volume-high"></i>
+            </ion-item>
+        </form>
+        <div class="row">
+            <div class="col"><button  id="grabarAudio-button7" class="button button-assertive  button-block" ng-click="recordAudio()">Grabar Audio</button></div>
+            <div class="col"><button  id="grabarAudio-button7" class="button button-assertive  button-block" ng-click="prueba()">Guardar Audio</button></div>
+        </div>
+        <div class="button-bar">
+            <button id="grabarAudio-button8" class="button button-dark  button-block icon ion-android-arrow-dropright-circle" ng-click="playAudio()"></button>
+            <button id="grabarAudio-button9" class="button button-dark  button-block icon ion-ios-pause" ng-click="pauseAudio()"></button>
+            <button id="grabarAudio-button10" class="button button-dark  button-block icon ion-stop" ng-click="stopAudio()"></button>
+        </div>
+        <div class="button-bar"></div>
+    </ion-content>
+</ion-view>
