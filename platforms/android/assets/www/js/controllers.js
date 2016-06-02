@@ -35,13 +35,13 @@ angular.module('app.controllers', [])
 			navigator.notification.alert("Debe de grabar un audio primero . . .", null,"Error","Aceptar");
 			return;
 		}
-		else {
-			media = new Media (pathAudio, function(e) {
-				media.release();
-			},function(err) {
-				//
-			});
-		}
+		else if(Media.MEDIA_NONE == 0){
+	        media = new Media(fileAudio, function(e) {  //solo crear objeto cuando no grabé ningún sonido
+	        media.release();
+	        }, function(err) {
+	        console.log("media err", err);
+	        });
+    	}	
 
 		media.play();
 	}
@@ -58,6 +58,21 @@ angular.module('app.controllers', [])
    
 .controller('grabacionesCtrl', function($scope) {
 
-   
+	var myPath = dataDirectory + "/sounds/Voice 001.m4a";
+
+	$scope.playRecord = function () {
+
+
+		$scope.files = [
+		{name: "firstOne"},
+		{name: "secondOne"}
+		]
+		var recordAuxiliar = new Media(myPath, function(e) {  //solo crear objeto cuando no grabé ningún sonido
+	        media.release();
+	        }, function(err) {
+	        console.log("media err", err);
+	        });
+		media.play();
+   }
 })
        
