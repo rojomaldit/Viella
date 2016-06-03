@@ -58,21 +58,41 @@ angular.module('app.controllers', [])
    
 .controller('grabacionesCtrl', function($scope) {
 
-	var myPath = dataDirectory + "/sounds/Voice 001.m4a";
+	//var myPath = "file:///storage/emulated/0/Sounds/";
+	var myPath = cordova.file.externalRootDirectory + "/Sounds";
 
-	$scope.playRecord = function () {
+
+	
 
 
-		$scope.files = [
-		{name: "firstOne"},
-		{name: "secondOne"}
-		]
-		var recordAuxiliar = new Media(myPath, function(e) {  //solo crear objeto cuando no grabé ningún sonido
-	        media.release();
+	function readSuccess (entries) {
+		// var str = JSON.stringify(entries,null,4);
+		
+		$scope.files = entries;
+		$scope.apply();
+
+	}
+
+	function readErr () {
+
+		// in case of error
+	}
+
+	window.resolveLocalFileSystemURL (myPath,function(dirEntry) {
+
+		var directoryReader = dirEntry.createReader();
+		directoryReader.readEntries(readSuccess,readErr);
+
+	});
+
+	$scope.playRecordedAudio = function () {
+		
+		var recordAuxiliar = new Media(f.name, function(e) {  //solo crear objeto cuando no grabé ningún sonido
+	        recordAuxiliar.release();
 	        }, function(err) {
 	        console.log("media err", err);
 	        });
-		media.play();
+		recordAuxiliar.play();
    }
 })
        
