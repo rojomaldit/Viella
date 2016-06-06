@@ -55,11 +55,21 @@ angular.module('app.controllers', [])
 	}
 	
 })
+
+
+
+
+
+
+
+
+
+
    
 .controller('grabacionesCtrl', function($scope) {
 
 	//var myPath = "file:///storage/emulated/0/Sounds/";
-	var myPath = cordova.file.externalRootDirectory + "/Sounds";
+	var myPath = cordova.file.externalRootDirectory + "/Sounds/";
 
 
 	
@@ -69,7 +79,7 @@ angular.module('app.controllers', [])
 		// var str = JSON.stringify(entries,null,4);
 		
 		$scope.files = entries;
-		$scope.apply();
+		$scope.$apply();
 
 	}
 
@@ -85,14 +95,34 @@ angular.module('app.controllers', [])
 
 	});
 
-	$scope.playRecordedAudio = function () {
+	
+	$scope.playRecordedAudio = function (name) {
 		
-		var recordAuxiliar = new Media(f.name, function(e) {  //solo crear objeto cuando no grabé ningún sonido
+		
+		var recordAuxiliar = new Media(myPath + name, function(e) {  //solo crear objeto cuando no grabé ningún sonido
 	        recordAuxiliar.release();
 	        }, function(err) {
 	        console.log("media err", err);
 	        });
 		recordAuxiliar.play();
    }
+
+
+   $scope.deleteRecordedAudio = function (name) {
+
+   		window.resolveLocalFileSystemURL (myPath + name,function(fileEntry) {
+
+			fileEntry.remove();
+			
+		});
+
+   }
+
+
+
 })
+
+	
+
+
        

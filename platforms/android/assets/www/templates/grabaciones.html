@@ -20,14 +20,22 @@
           </div>
  
           <div class="item tabs tabs-secondary tabs-icon-left">
+          
             <a class="tab-item" href="#" ng-click="playRecordedAudio(f.name)">
               <i class="icon ion-ios-play"></i>
               Play
             </a>
-            <a class="tab-item" href="#" ng-click="deleteRecordedAudio()">
+
+            <a class="tab-item" href="#" ng-click="stopRecordedAudio(f.name)">
               <i class="icon ion-android-checkbox-blank"></i>
               Stop
             </a>
+
+            <a class="tab-item" href="#" ng-click="deleteRecordedAudio(f.name)">
+              <i class="icon ion-trash-a"></i>
+              Delete
+            </a>
+
           </div>
  
         </div>
