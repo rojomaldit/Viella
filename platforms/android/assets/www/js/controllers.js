@@ -68,7 +68,7 @@ angular.module('app.controllers', [])
    
 .controller('grabacionesCtrl', function($scope) {
 
-	//var myPath = "file:///storage/emulated/0/Sounds/";
+	
 	var myPath = cordova.file.externalRootDirectory + "/Sounds/";
 
 
@@ -76,8 +76,11 @@ angular.module('app.controllers', [])
 
 
 	function readSuccess (entries) {
-		// var str = JSON.stringify(entries,null,4);
 		
+		var str = JSON.stringify(entries,null,4);
+		alert(str);
+
+
 		$scope.files = entries;
 		$scope.$apply();
 
