@@ -113,7 +113,7 @@ angular.module('app.controllers', [])
 
    $scope.deleteRecordedAudio = function (name) {
 
-   		window.resolveLocalFileSystemURL (myPath + name,function(fileEntry) {
+   		window.resolveLocalFileSystemURL (myPath + name, function(fileEntry) {
 
 			fileEntry.remove();
 			
@@ -121,6 +121,11 @@ angular.module('app.controllers', [])
 
    }
 
+   $scope.stopRecordedAudio = function (name) {
+   		media.stop();
+   }
+
+   
 
 
 })

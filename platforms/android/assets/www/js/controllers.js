@@ -77,8 +77,8 @@ angular.module('app.controllers', [])
 
 	function readSuccess (entries) {
 		
-		var str = JSON.stringify(entries,null,4);
-		alert(str);
+		// var str = JSON.stringify(entries,null,4);
+		// alert(str);
 
 
 		$scope.files = entries;
@@ -113,12 +113,16 @@ angular.module('app.controllers', [])
 
    $scope.deleteRecordedAudio = function (name) {
 
-   		window.resolveLocalFileSystemURL (myPath + name,function(fileEntry) {
+   		window.resolveLocalFileSystemURL (myPath + name, function(fileEntry) {
 
 			fileEntry.remove();
 			
 		});
 
+   }
+
+   $scope.stopRecordedAudio = function (name) {
+   		media.stop();
    }
 
 
