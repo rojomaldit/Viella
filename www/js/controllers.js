@@ -6,7 +6,7 @@ angular.module('app.controllers', [])
    
 .controller('grabarAudioCtrl', function($scope) {
 	
-    var fileAudio;
+    $scope.fileAudio;
     var pathAudio;
     var media;
 

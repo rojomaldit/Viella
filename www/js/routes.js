@@ -35,7 +35,10 @@ angular.module('app.routes', [])
     views: {
       'tab3': {
         templateUrl: 'templates/grabaciones.html',
-        controller: 'grabacionesCtrl'
+        controller: 'grabacionesCtrl',
+        onEnter: function ($scope){
+          alert("Hola");
+        }
       }
     }
   })

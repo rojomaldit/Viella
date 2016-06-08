@@ -117,10 +117,8 @@ angular.module('app.controllers', [])
 	   		window.resolveLocalFileSystemURL (myPath + name, function(fileEntry) {
 				fileEntry.remove();
 				window.resolveLocalFileSystemURL (myPath,function(dirEntry) {
-
 					var directoryReader = dirEntry.createReader();
 					directoryReader.readEntries(readSuccess,readErr);
-
 				});
 			});	
 	   	}
