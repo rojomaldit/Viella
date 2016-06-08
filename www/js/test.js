@@ -8,7 +8,6 @@ function dltRecAudio (buttonIndex, name) {
 
    	if (buttonIndex == 2) {
    		window.resolveLocalFileSystemURL (myPath + name,function(fileEntry) {
-
 			fileEntry.remove();
 			
 		});	
@@ -21,13 +20,13 @@ function dltRecAudio (buttonIndex, name) {
 
    $scope.deleteRecordedAudio = function (name) {
 
-      navigator.notification.confirm (
-         '¿Desea eliminar la grabacion?',
-         function (buttonIndex) {
-            dltRecAudio (buttonIndex , name)
-         },
-         'Eliminando grabacion . . .',
-         ["Cancel","Accept"],
-         );
+      navigator.notification.confirm(
+       '¿Estas Seguro?', // message
+        function (buttonIndex) {
+            dltRecAudio(buttonIndex, name);
+        },            // callback to invoke with index of button pressed
+       'Confirmacion',           // title
+       ['Cancel','Aceptar']     // buttonLabels
+   );
    }
 

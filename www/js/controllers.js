@@ -111,21 +111,38 @@ angular.module('app.controllers', [])
    }
 
 
-   $scope.deleteRecordedAudio = function (name) {
+	function dltRecAudio (buttonIndex, name) {
 
-   		window.resolveLocalFileSystemURL (myPath + name, function(fileEntry) {
+	   	if (buttonIndex == 2) {
+	   		window.resolveLocalFileSystemURL (myPath + name, function(fileEntry) {
+				fileEntry.remove();
+			});	
+	   	}
 
-			fileEntry.remove();
-			
-		});
-
+	   	else {
+	   		return;
+	   	}
    }
+
+
+	$scope.deleteRecordedAudio = function (name) {
+
+	    navigator.notification.confirm(
+	       '¿Estas Seguro?', // message
+	        function (buttonIndex) {
+	            dltRecAudio(buttonIndex, name);
+	        },            // callback to invoke with index of button pressed
+	       'Confirmacion',           // title
+	       ['Cancel','Aceptar']     // buttonLabels
+   		);
+   }
+
 
    $scope.stopRecordedAudio = function (name) {
    		media.stop();
    }
 
-   
+
 
 
 })
