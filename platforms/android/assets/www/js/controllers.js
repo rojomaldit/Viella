@@ -2,22 +2,38 @@ angular.module('app.controllers', [])
   
 .controller('reproducirCtrl', function($scope) {
 
+	$scope.createSoundsDir = function () {
+		alert("hola ");
+	}
+
 })
    
 .controller('grabarAudioCtrl', function($scope) {
 	
-    var fileAudio;
+    $scope.fileAudio;
     var pathAudio;
     var media;
 
 
 	function captureSuccess(mediaFiles){
-		var i, lenAudio;
 
-    	for (i = 0, lenAudio = mediaFiles.length; i < lenAudio; i += 1) {
-        	fileAudio = mediaFiles[0].localURL;
-        	pathAudio = mediaFiles[i].fullPath;
-    	}	
+        fileAudio = mediaFiles[0].localURL;
+        var extension = fileAudio.split(".").pop();
+        var filepart = Date.now();
+        var filename = filepart + "." + extension;
+
+        var path = cordova.file.externalRootDirectory + "/Media";
+
+        window.resolveLocalFileSystemURL(path, function(dirEntry) {
+        	window.resolveLocalFileSystemURL(file,function(fileEntry) {
+        		fileEntry.moveTo(dirEntry, filename, function(e) {
+        			fileAudio = e.fullPath;
+        			
+        		}, function(e) {
+        			alert("Error in move");
+        		});
+        	});
+        });
 	}
 
 	function captureError () {
@@ -56,20 +72,10 @@ angular.module('app.controllers', [])
 	
 })
 
-
-
-
-
-
-
-
-
-
-   
 .controller('grabacionesCtrl', function($scope) {
 
 	
-	var myPath = cordova.file.externalRootDirectory + "/Sounds/";
+	var myPath = cordova.file.externalRootDirectory + "/Media/";
 
 
 	
@@ -77,8 +83,8 @@ angular.module('app.controllers', [])
 
 	function readSuccess (entries) {
 		
-		// var str = JSON.stringify(entries,null,4);
-		// alert(str);
+		var str = JSON.stringify(entries,null,4);
+		alert(str);
 
 
 		$scope.files = entries;
