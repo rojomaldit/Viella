@@ -35,12 +35,12 @@
     <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
     <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-    <name>Reproductor Proa</name>
+    <name>Audiótica</name>
     <description>
         Un simple reproductor y grabador desarrollado con Cordova.
     </description>
-    <author email="dreamallica@gmail.com" href="http:www.compromisoweb.com.ar">
-      García Héctor Raúl
+    <author email="max_exp32@outlook.com" href="http:www.compromisoweb.com.ar">
+      Max Moyano
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -53,5 +53,4 @@
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
-    <preference name="AndroidPersistentFileLocation" value="Internal" />
 </widget>

@@ -3351,6 +3351,7 @@ body.grade-c {
   position: relative; }
 
 .scroll-content {
+  background-image: url(../../../img/fondo2.gif);
   position: absolute;
   top: 0;
   right: 0;
@@ -5654,7 +5655,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding: 16px;
   border-width: 1px;
   border-style: solid;
-  font-size: 16px; }
+  font-size: 11px; } /*tapa  16*/
   .item h2 {
     margin: 0 0 2px 0;
     font-size: 16px;
@@ -5688,8 +5689,8 @@ ion-tabs.tabs-color-active-dark .tab-item {
     display: -ms-flexbox;
     display: flex;
     position: absolute;
-    top: 16px;
-    right: 32px; }
+    top: 5px;
+    right: 14px; }
   .item.item-button-right .badge {
     right: 67px; }
   .item.item-divider .badge {
@@ -6347,7 +6348,8 @@ button.item.item-button-right {
   min-height: 30px;
   background-color: #f5f5f5;
   color: #222;
-  font-weight: 500; }
+  font-weight: 800;
+  text-align: center; }
 
 .platform-ios .item-divider-platform,
 .item-divider-ios {
@@ -6586,7 +6588,7 @@ button.item.item-button-right {
 .list-inset {
   overflow: hidden;
   margin: 20px 10px;
-  border-radius: 2px;
+  border-radius: 15px;
   background-color: #fff; }
 
 .card {

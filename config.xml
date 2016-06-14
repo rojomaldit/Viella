@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Reproductor Proa</name>
+  <name>Audiótica</name>
   <description>
         Un simple reproductor y grabador desarrollado con Cordova.
     </description>
-  <author email="dreamallica@gmail.com" href="http:www.compromisoweb.com.ar">
-      García Héctor Raúl
+  <author email="max_exp32@outlook.com" href="http:www.compromisoweb.com.ar">
+      Max Moyano
     </author>
   <content src="index.html"/>
   <access origin="*"/>
@@ -18,7 +18,7 @@
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="AndroidPersistentFileLocation" value="Compatibility"/>
-  <preference name="AndroidPersistentFileLocation" value="Internal"/>
+  <!-- <preference name="AndroidPersistentFileLocation" value="Internal"/> -->
 
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>

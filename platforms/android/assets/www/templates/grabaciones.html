@@ -1,44 +1,42 @@
-<ion-view title="Grabaciones" id="page4" >
+<ion-view cache-view="false" title="Grabaciones" id="page4">
     <ion-content padding="true" class="has-header">
+    <div>
         <div class="list list-inset">
             <label class="item item-input">
-            <i class="icon ion-search placeholder-icon"></i>
-            <input type="text" placeholder="Buscar" ng-model="buscar">
+              <i class="icon ion-search placeholder-icon"> </i>
+              <input ng-model="query" type="text" placeholder="FilterBy" autofocus>
+            </label>
+            <label class="item item-input">
+              <i class="icon ion-search placeholder-icon"></i>
+              <input type="text" >
             </label>
         </div>
 
-        <button  id="grabarAudio-button7" class="button button-assertive  button-block" >Listado de Grabaciones</button> 
-
-
-
-         <div id=" + f.name + " class="list card" ng-repeat="f in files | filter:myFilter">
- 
+         <!--
+         <div class="list card" ng-repeat="f in files | filter:query | orderBy:'name' ">
           <div class="item item-avatar">
             <img src="img/wave.png">
-            <h2> {{f.name}}   </h2>
+            <h2>{{f.name}}</h2>
             <p>Rock</p>
           </div>
- 
           <div class="item tabs tabs-secondary tabs-icon-left">
-          
-            <a class="tab-item" href="#" ng-click="playRecordedAudio(f.name)">
-              <i class="icon ion-ios-play"></i>
-              Play
+            <a class="tab-item" href="#"  ng-click="playRecordedAudio(f.name)">
+              <i class="icon ion-ios-play assertive"></i>
             </a>
-
-            <a class="tab-item" href="#" ng-click="stopRecordedAudio(f)">
-              <i class="icon ion-android-checkbox-blank"></i>
-              Stop
+            <a class="tab-item" href="#" ng-click="stopRecordedAudio()">
+              <i class="icon ion-android-checkbox-blank assertive"></i>
             </a>
-
             <a class="tab-item" href="#" ng-click="deleteRecordedAudio(f.name)">
-              <i class="icon ion-trash-a"></i>
-              Delete
+              <i class="icon ion-trash-a assertive"></i>
             </a>
-
           </div>
- 
-        </div>
- 
-    </ion-content>
+          -->
+
+
+          <ul ng-repeat="f in files | filter: query | orderBy: 'name' ">
+            <li>{{f.name}}</li>
+          </ul>
+
+      </div>
+     </ion-content>
 </ion-view>
