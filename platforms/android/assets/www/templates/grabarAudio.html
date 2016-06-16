@@ -3,27 +3,36 @@
         <ion-list>
             <div class="list card">
                 <div class="item item-avatar">
-                    <img src="img/metallica-icon.png">
-                    <h2>Metallica</h2>
-                    <p>Master of Puppets</p>
-                </div>
-                <form class="list">
-                	<div class="row">
-           				<div class="col"><button  id="grabarAudio-button7" class="button button-assertive  icon-left ion-star  icon-right ion-chevron-right button-block" ng-click="capturarAudio()">Grabar Audio</button></div>
-        			</div>
-            		<ion-item class="range range-positive">
-            		    <i class = "icon ion-music-note"></i>
-            		    <input type="range" value="50" min="0" max="100">
-            		    <i class = "icon ion-music-note"></i>
-            		</ion-item>
-        		</form>
+                  <img src="avatar.jpg">
+                  <h2>Pretty Hate Machine</h2>
+                  <p>Nine Inch Nails</p>
 
-        		<div class="button-bar">
-            		<button id="grabarAudio-button8" class="button button-dark  button-block icon ion-android-arrow-dropright-circle" ng-click="reproducirAudioGrabado()"></button>
-            		<button id="grabarAudio-button9" class="button button-dark  button-block icon ion-ios-pause" onclick="pausarAudio();"></button>
-            		<button id="grabarAudio-button10" class="button button-dark  button-block icon ion-stop" onclick="pararAudio();"></button>
-        		</div>
-           	</div>
+                </div>
+
+                <div class="item item-image">
+                    <div class="button-bar">
+                    <button id="grabarAudio-button8"  class="button button-dark  button-block icon ion-android-microphone " ng-click="capturarAudio()"></button>
+
+                        <button id="grabarAudio-button8" ng-if="state == 'record'" class="button button-dark  button-block icon ion-android-microphone " ng-click="capturarAudio()"></button>
+
+                        <button id="grabarAudio-button8" ng-if="state == 'recording'" class="button button-dark  button-block icon ion-android-microphone" ng-click="capturarAudio()"></button>
+                        <button id="grabarAudio-button9"  ng-if="state != 'pause'" class="button button-dark  button-block icon ion-ios-pause" ng-click="pausarAudio()"></button>
+                        <button id="grabarAudio-button9" ng-if="state == 'pause'" class="button button-dark  button-block icon ion-record" ng-click="pausarAudio()"></button>
+                        <button id="grabarAudio-button10" class="button button-dark  button-block icon ion-stop" ng-click="pararAudio()"></button>
+                    </div>
+                </div>
+
+                <a class="item item-icon-left assertive" ng-if="state != 'recording'" href="#">
+                  <i class="icon ion-music-note"></i>
+                  Puede grabar un Audio
+                </a>
+
+                <a ng-if="state == 'recording'" class="item item-icon-left assertive" href="#">
+                  <ion-spinner icon="lines" ></ion-spinner>
+                  Grabando
+                </a>
+
+            </div>
         </ion-list>
     </ion-content>
 </ion-view>

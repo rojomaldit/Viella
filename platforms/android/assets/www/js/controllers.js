@@ -21,84 +21,39 @@ $scope.loadImages = function(){
 })
    
 .controller('grabarAudioCtrl', function($scope) {
-	var audioFile;
-	var media;
-
-	//Asigno los valores de las variables si la grabación anduvo bien 
-	var captureSuccess = function(mediaFiles) {
-      var file = mediaFiles[0].localURL;
-      var extension = file.split(".").pop();
-      var filepart = Date.now();
-      var filename = filepart + "." + extension;
-
-      var path = cordova.file.externalRootDirectory + "/Audiotica";  
-
-      window.resolveLocalFileSystemURL(path, function(dirEntry) {
-        window.resolveLocalFileSystemURL(file, function(fileEntry) {
-          fileEntry.moveTo(dirEntry, filename, function(e){
-            audioFile = e.fullPath;
-          }, function(e) {
-            alert('Error durante la copia del archivo de audio');
-          });
-        }); 
-	    });
-  	}
-	// Capturo errores si falló la grabación del audio
-	var captureError = function(error) {
-    	//navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
-	};
-
-	$scope.reproducirAudioGrabado = function(){
-		if (typeof audioFile === "undefined") {
-    		navigator.notification.alert("Primero debe grabar un Audio.", null, "Atención", "Aceptar");
-			return; 
-    	}
-    	else if(Media.MEDIA_NONE == 0){
-        	media = new Media(audioFile, function(e) {  //solo crear objeto cuando no grabé ningún sonido
-        	media.release();
-        	}, function(err) {
-        	console.log("media err", err);
-        });
-    	}
-    	media.play();
-	}
-
-	function pausarAudio(){
-    	media.pause();
-	}
-
-	function pararAudio(){
-    	media.stop();
-	}
+  var audio =null;
 
 	//Capturo audio 
 	$scope.capturarAudio = function(){
-		navigator.device.capture.captureAudio(captureSuccess, captureError,{limit:1});
+    var extension = ".wav";
+    filepart = new Date();
+    var day = filepart.getDate().toString();
+    var month = (filepart.getMonth()+1).toString();
+    var year = filepart.getFullYear().toString();
+    var hours = filepart.getHours().toString();
+    var minutes = filepart.getMinutes().toString();
+    var seconds = filepart.getSeconds().toString();
+    var filename = day + "-" + month + "-" + year + "_" + hours + ":" + minutes + ":" + seconds;
+    var src = cordova.file.externalRootDirectory + "/sonidosproa/" + filename + extension;
+
+    audio = new Media(src, function(e){console.log(e,"success");}, function(e){console.log(e,"error");});
+    audio.startRecord();
 	}
 
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess, null); 
-
-	function onRequestFileSystemSuccess(fileSystem) { 
-    	var entry=fileSystem.root; 
-        entry.getDirectory("Audiotica", {create: true, exclusive: false}, onGetDirectorySuccess, onGetDirectoryFail); 
+	$scope.pararAudio = function(){
+    audio.stopRecord();
+    audio.release();
+    audio=null;
 	}
 
-	function onGetDirectorySuccess(dir) { 
-    	console.log("Se a creado el directorio " + dir.name); 
-	} 
 
-	function onGetDirectoryFail(error) { 
-    	console.log("Error creando el directorio " + error.code); 
-	} 
 })
    
 .controller('grabacionesCtrl', function($scope) {
-    /*$scope.myFilter = function(file){
-      
-    };*/
 
     var onSuccessCallback = function(entries){
       //var str = JSON.stringify(entries, null, 4);
+
       $scope.files = entries;
       $scope.$apply();
     }
@@ -107,18 +62,16 @@ $scope.loadImages = function(){
     // In case of error
     }
 
-    
-
-    var myPath = cordova.file.externalRootDirectory + "/Audiotica";
+    var myPath = cordova.file.externalRootDirectory + "/sonidosproa/";
     window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
-    var directoryReader = dirEntry.createReader();
-    directoryReader.readEntries(onSuccessCallback,onFailCallback);
+      var directoryReader = dirEntry.createReader();
+      directoryReader.readEntries(onSuccessCallback,onFailCallback);
     });      
 
-    
+    //reproduzco un audio grabado determinado
     $scope.playRecordedAudio = function(name){
 
-        my_media = new Media(cordova.file.externalRootDirectory + "/Audiotica/" + name, function(e) { 
+        my_media = new Media(cordova.file.externalRootDirectory + "/sonidosproa/" + name, function(e) { 
           my_media.release();
         }, function(err) {
           console.log("media err", err);
@@ -129,6 +82,8 @@ $scope.loadImages = function(){
     }
 
     var onResolveSuccess = function(fileEntry){
+      var str = JSON.stringify(fileEntry, null, 4);
+      alert(str);
       fileEntry.remove();
       window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
       var directoryReader = dirEntry.createReader();
@@ -144,9 +99,13 @@ $scope.loadImages = function(){
     function onConfirmDltRecordedAudio(buttonIndex, name) {
       if(buttonIndex == '1'){  //se confirma la eliminación del audio
         //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
-        window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "/Audiotica/" + name, onResolveSuccess, fail);
-
+        alert(cordova.file.externalRootDirectory + "/sonidosproa/" + name);
+        window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "/sonidosproa/" + name, onResolveSuccess, fail);
       }
+    }
+
+    $scope.stopRecordedAudio = function(){
+
     }
 
     //elimino un audio grabado determinado

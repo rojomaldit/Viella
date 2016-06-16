@@ -30,6 +30,8 @@
   font-weight: normal;
   font-style: normal; }
 
+
+
 .ion, .ionicons,
 .ion-alert:before,
 .ion-alert-circled:before,
@@ -4096,6 +4098,7 @@ a.subdued {
   font-size: 19px;
   line-height: 44px; }
 
+
 .bar-light .button {
   border-color: transparent;
   background-color: white;
@@ -5655,7 +5658,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding: 16px;
   border-width: 1px;
   border-style: solid;
-  font-size: 11px; } /*tapa  16*/
+  font-size: 16px; } /*tapa  11*/
   .item h2 {
     margin: 0 0 2px 0;
     font-size: 16px;
@@ -7043,6 +7046,7 @@ button.swiper-pagination-bullet {
   height: 100%;
   pointer-events: none;
   z-index: 10; }
+
 
 .swiper-container-3d .swiper-slide-shadow-left {
   background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, 0.5)), to(transparent));
@@ -8518,7 +8522,7 @@ progress {
  */
 .button {
   border-color: transparent;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   color: #444;
   position: relative;
   display: inline-block;

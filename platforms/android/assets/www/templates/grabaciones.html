@@ -1,42 +1,54 @@
 <ion-view cache-view="false" title="Grabaciones" id="page4">
     <ion-content padding="true" class="has-header">
-    <div>
         <div class="list list-inset">
             <label class="item item-input">
-              <i class="icon ion-search placeholder-icon"> </i>
-              <input ng-model="query" type="text" placeholder="FilterBy" autofocus>
-            </label>
-            <label class="item item-input">
-              <i class="icon ion-search placeholder-icon"></i>
-              <input type="text" >
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text">
             </label>
         </div>
 
-         <!--
-         <div class="list card" ng-repeat="f in files | filter:query | orderBy:'name' ">
-          <div class="item item-avatar">
-            <img src="img/wave.png">
-            <h2>{{f.name}}</h2>
-            <p>Rock</p>
-          </div>
-          <div class="item tabs tabs-secondary tabs-icon-left">
-            <a class="tab-item" href="#"  ng-click="playRecordedAudio(f.name)">
-              <i class="icon ion-ios-play assertive"></i>
-            </a>
-            <a class="tab-item" href="#" ng-click="stopRecordedAudio()">
-              <i class="icon ion-android-checkbox-blank assertive"></i>
-            </a>
-            <a class="tab-item" href="#" ng-click="deleteRecordedAudio(f.name)">
-              <i class="icon ion-trash-a assertive"></i>
-            </a>
-          </div>
-          -->
+        <!--<ul class="list">
+        <div class="item item-divider">
+            Junio del 2016
+        </div>
+        <div class="item item-icon-left item-button-right">
+          <i class="icon ion-android-microphone"></i>
+            sdgfdsfgsdfgsdfgdsfg
+          <div class="buttons">
+            <button class="button" ng-click="playRecordedAudio(f.name)">
+              <i class="icon ion-play dark"></i>
+            </button>
+     
+            <button class="button" ng-click="stopRecordedAudio()">
+              <i class="icon ion-stop"></i>
+            </button>
+            <button class="button" ng-click="deleteRecordedAudio(f.name)">
+              <i class="icon ion-trash-a"></i>
+            </button>           
+           </div>
+        </div>       
+        </ul>-->
 
-
-          <ul ng-repeat="f in files | filter: query | orderBy: 'name' ">
-            <li>{{f.name}}</li>
-          </ul>
-
-      </div>
+        <ul class="list">
+            <div class="item item-divider">
+                Junio del 2016
+            </div>
+		    <div class="item item-icon-left item-button-right" ng-repeat="f in files">
+		        <i class="icon ion-android-microphone"></i>
+       	        {{f.name}}
+  		        <div class="buttons">
+      		        <button class="button" ng-click="playRecordedAudio(f.name)">
+         	            <i class="icon ion-ios-play dark"></i>
+      		        </button>
+     
+      		        <button class="button" ng-click="stopRecordedAudio(f.name)">
+         	            <i class="icon ion-stop"></i>
+      		        </button>
+			        <button class="button" ng-click="deleteRecordedAudio(f.name)">
+         	            <i class="icon ion-trash-a"></i>
+      		        </button>      		
+ 		        </div>
+		    </div>
+        </ul>
      </ion-content>
 </ion-view>
