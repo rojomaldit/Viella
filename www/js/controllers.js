@@ -2,6 +2,9 @@ angular.module('app.controllers', ['timer'])
 
 //CONTROLADOR DEL REPRODUCTOR   
 .controller('reproducirCtrl', function($scope) {
+
+
+	window.resolveLocalFileSystemURL()
 $scope.images = [];
 
 $scope.loadImages = function(){
@@ -113,6 +116,22 @@ $scope.loadImages = function(){
     		}
   		});
 	}
+
+
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess, null); 
+
+	function onRequestFileSystemSuccess(fileSystem) { 
+    	var entry=fileSystem.root; 
+        entry.getDirectory("sonidosproa", {create: true, exclusive: false}, onGetDirectorySuccess, onGetDirectoryFail); 
+	}
+
+	function onGetDirectorySuccess(dir) { 
+    	console.log("Se a creado el directorio " + dir.name); 
+	} 
+
+	function onGetDirectoryFail(error) { 
+    	console.log("Error creando el directorio " + error.code); 
+	} 
 
 })
 

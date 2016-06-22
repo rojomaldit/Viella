@@ -30,7 +30,14 @@
   font-weight: normal;
   font-style: normal; }
 
-
+#timer{
+  font-family: 'Oswald', sans-serif;
+  font-size: 53px;
+  margin-bottom: 20px;
+  color:#333333;
+  margin-top: -43px;
+  margin-bottom: 3px; 
+}
 
 .ion, .ionicons,
 .ion-alert:before,
@@ -3064,6 +3071,7 @@ html {
  * Remove default margin.
  */
 body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
   margin: 0;
   line-height: 1; }
 
@@ -3579,7 +3587,7 @@ p {
   margin: 0 0 10px; }
 
 small {
-  font-size: 85%; }
+  font-size: 130%; }
 
 cite {
   font-style: normal; }
@@ -6329,6 +6337,11 @@ button.item.item-button-right {
   padding-top: 0;
   padding-right: 0; }
 
+#recordImage{
+  width: 60%;
+  vertical-align: middle;
+}
+
 .item-image {
   padding: 0;
   text-align: center; }
@@ -7389,12 +7402,19 @@ ion-slides {
  * Spinners
  * --------------------------------------------------
  */
+
+
 .spinner {
   stroke: #444;
-  fill: #444; }
+  fill: #444;
+  }
   .spinner svg {
-    width: 28px;
-    height: 28px; }
+    width: 52% !important;
+    /*height: 285px !important;*/
+
+  }
+
+
   .spinner.spinner-light {
     stroke: #fff;
     fill: #fff; }
