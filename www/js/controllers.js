@@ -3,23 +3,72 @@ angular.module('app.controllers', ['timer'])
 //CONTROLADOR DEL REPRODUCTOR   
 .controller('reproducirCtrl', function($scope) {
 
+	document.addEventListener("deviceready", function() { 
+	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, firstFolder, null); 
+	}, false);
 
-	window.resolveLocalFileSystemURL()
-$scope.images = [];
+		function firstFolder(fileSystemOne) { 
+	        var firstEntry = fileSystemOne.root; 
+	        firstEntry.getDirectory("Audiotica", {create: true, exclusive: false}, successOne, failOne); 
+	    }
 
-$scope.loadImages = function(){
-	for (var i = 0; i < 100; i++) {
-		if(i % 3 === 0){
-			$scope.images.push({id:i, src:"img/metallica.jpg"});
-		}
-		else if (i % 2 === 0){
-			$scope.images.push({id:i, src:"img/thepolice.jpg"});
-		}
-		else{
-			$scope.images.push({id:i, src:"img/vanhalen.jpg"});
-		}
-	};
-}
+	    function successOne(dirOne) { 
+	    	console.log("Se a creado el directorio " + dirOne.name); 
+	    } 
+
+	    function failOne(errorOne) { 
+	        console.log("Error creando el directorio " + errorOne.code); 
+	    } 
+
+	document.addEventListener("deviceready", function() { 
+	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, secondFolder, null); ;
+	}, false);
+
+	    function secondFolder(fileSystemTwo) { 
+        var secondEntry = fileSystemTwo.root; 
+           	secondEntry.getDirectory("AudioticaMusic", {create: true, exclusive: false}, successTwo, failTwo); 
+        }
+
+        function successTwo(dirTwo) { 
+            console.log("Se a creado el directorio " + dirTwo.name); 
+        } 
+
+        function failTwo(errorTwo) { 
+            console.log("Error creando el directorio " + errorTwo.code); 
+        }
+
+	
+  var readMusicScss = function(entries){
+  	str = JSON.stringify(entries, null, 4);	
+  	alert(str);
+  	$scope.tracks = entries;
+    $scope.$apply();
+
+    
+  }
+
+  var readMusicFail = function(){
+  	// In case of error
+  }
+
+  $scope.music = function () {
+	  var myPath = cordova.file.externalRootDirectory + "/AudioticaMusic/";
+	  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+	    var directoryReader = dirEntry.createReader();
+	    directoryReader.readEntries(readMusicScss,readMusicFail);
+	  }); 
+  }
+  
+
+
+
+	
+
+        
+
+    
+
+
 
 })
    
@@ -90,7 +139,7 @@ $scope.loadImages = function(){
    		var seconds = filepart.getSeconds().toString();
    		var sep = "-";
    		var filename = day + sep + month + sep + year + sep + hours + sep + minutes + sep + seconds + extension;
-   		var src = cordova.file.externalRootDirectory + "/sonidosproa/" + filename;
+   		var src = cordova.file.externalRootDirectory + "/Audiotica/" + filename;
    		audio = new Media(src, function(e){console.log(e,"success");}, function(e){console.log(e,"error");});
    		audio.startRecord();
 	}
@@ -117,21 +166,7 @@ $scope.loadImages = function(){
   		});
 	}
 
-
-	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onRequestFileSystemSuccess, null); 
-
-	function onRequestFileSystemSuccess(fileSystem) { 
-    	var entry=fileSystem.root; 
-        entry.getDirectory("sonidosproa", {create: true, exclusive: false}, onGetDirectorySuccess, onGetDirectoryFail); 
-	}
-
-	function onGetDirectorySuccess(dir) { 
-    	console.log("Se a creado el directorio " + dir.name); 
-	} 
-
-	function onGetDirectoryFail(error) { 
-    	console.log("Error creando el directorio " + error.code); 
-	} 
+	
 
 })
 
@@ -149,7 +184,7 @@ $scope.loadImages = function(){
   // In case of error
   }
 
-  var myPath = cordova.file.externalRootDirectory + "/sonidosproa/";
+  var myPath = cordova.file.externalRootDirectory + "/Audiotica/";
   window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
     var directoryReader = dirEntry.createReader();
     directoryReader.readEntries(onSuccessCallback,onFailCallback);
@@ -157,7 +192,7 @@ $scope.loadImages = function(){
 
   //Reproduzco un audio grabado determinado
   $scope.playRecordedAudio = function(name){
-    my_media = new Media(cordova.file.externalRootDirectory + "/sonidosproa/" + name, function(e) { 
+    my_media = new Media(cordova.file.externalRootDirectory + "/Audiotica/" + name, function(e) { 
     my_media.release();
     }, function(err) {
       console.log("media err", err);
@@ -194,7 +229,7 @@ $scope.loadImages = function(){
 
   function onConfirmDltRecordedAudio(buttonIndex, name) {
     if(buttonIndex == '1'){  //se confirma la eliminación del audio
-      window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "/sonidosproa/" + name, onResolveSuccess, fail);
+      window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "/Audiotica/" + name, onResolveSuccess, fail);
     }
   }
 
