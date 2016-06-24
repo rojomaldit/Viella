@@ -15,7 +15,7 @@
             <div class="item item-divider">
                 Junio del 2016
             </div>
-		    <div class="item item-icon-left item-button-right" ng-repeat="f in files">
+		    <div class="item item-icon-left item-button-right" ng-if="audioTracks!=0" ng-repeat="f in files">
 		        <i class="icon ion-android-microphone assertive"></i>
        	        {{f.name}}
   		        <div class="buttons">
@@ -31,6 +31,13 @@
       		        </button>      		
  		        </div>
 		    </div>
+        <div ng-if="audioTracks==0">
+          <div class="card">
+            <div class="item item-text-wrap">
+              Actualmente no hay ningún Audio grabado en la Biblioteca de Grabaciones.
+            </div>
+          </div>
+        </div>
         </ul>
      </ion-content>
 </ion-view>

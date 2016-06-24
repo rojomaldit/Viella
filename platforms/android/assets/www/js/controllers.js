@@ -44,11 +44,7 @@ angular.module('app.controllers', ['timer'])
   	$scope.tracks = entries;
     $scope.$apply();
 
-    for (var i = 0; i < tracks.length; i++) {
-    	if (tracks[i] == isDirectory: true ) {
-    		alert("no creo que ande");
-    	}
-    }
+    
   }
 
   var readMusicFail = function(){

@@ -1,7 +1,8 @@
-<ion-view title="Reproducir" id="page2">
-    <ion-content padding="true" class="has-header">
+<ion-view  title="Reproducir" id="page2">
+    <ion-content padding="true" class="has-header" ng-init="loadImages()">
 
-        <!--
+    	<!--<button id="grabarAudio-button8" class="button button-dark  button-block" ng-click="prueba()">Probar</button>-->
+
         <div class="row" ng-repeat="image in images" ng-if="$index % 3 === 0">
             <div class="col col-33" ng-if="$index < images.length">
                 <div class="list card">
@@ -37,13 +38,5 @@
                 </div>
             </div>                                  
         </div>
-        -->
-        <button class="button button-full button-dark" ng-click="music()"> Actualizar </button>
-        <div class="item item-icon-left item-button-right" ng-repeat="m in tracks">
-                {{m.name}}
-        </div>
-
-
-
     </ion-content>
 </ion-view>
