@@ -38,33 +38,62 @@ angular.module('app.controllers', ['timer'])
         }
 
 	
+
+  $scope.status = 0;
   var readMusicScss = function(entries){
-  	str = JSON.stringify(entries, null, 4);	
-  	alert(str);
+  	//str = JSON.stringify(entries, null, 4);	
+  	//alert(str);
   	$scope.tracks = entries;
     $scope.$apply();
 
-    for (var i = 0; i < tracks.length; i++) {
-    	if (tracks[i] == isDirectory: true ) {
-    		alert("no creo que ande");
-    	}
-    }
+    
   }
 
   var readMusicFail = function(){
   	// In case of error
   }
 
-  $scope.music = function () {
+  $scope.musicFolder = function () {
 	  var myPath = cordova.file.externalRootDirectory + "/AudioticaMusic/";
 	  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
 	    var directoryReader = dirEntry.createReader();
 	    directoryReader.readEntries(readMusicScss,readMusicFail);
 	  }); 
   }
-  
 
 
+  var readTracksScss = function(entries){
+    //str = JSON.stringify(entries, null, 4); 
+    //alert(str);
+    $scope.music = entries;
+    $scope.$apply();
+  }
+
+  var readTracksFail = function () {
+
+  }
+
+  var dirUrl;
+
+  $scope.openDir = function (dirName) {
+    dirUrl = cordova.file.externalRootDirectory + "/AudioticaMusic/" + dirName;
+    
+    window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
+      var directoryReader = dirEntry.createReader();
+      directoryReader.readEntries(readTracksScss,readMusicFail);
+    }); 
+    $scope.status = 1;
+  }
+
+
+  $scope.playMusic = function (fileName) {
+   
+      var track = new Media(dirUrl + "/" + fileName, function(e) { 
+      track.release();
+      }, function(err) {
+      });
+      track.play();
+  }
 
 	
 
