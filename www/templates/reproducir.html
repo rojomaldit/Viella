@@ -38,5 +38,33 @@
                 </div>
             </div>                                  
         </div>
+<<<<<<< HEAD
+=======
+        -->
+        <button class="button button-full button-dark" ng-click="musicFolder()"> Actualizar </button>
+
+
+
+        <div class="item item-icon-left item-button-right" ng-click="openDir(t.name)" ng-repeat="t in tracks" ng-if="status==0">
+            {{t.name}}
+        </div>
+
+        <div class="item item-icon-left item-button-right" ng-repeat="m in music" ng-if="status == 1">
+            {{m.name}}
+            <button class="button" ng-click="playMusic(m.name)">
+                 <i class="icon ion-ios-play dark"></i>
+            </button>
+            
+        </div>
+
+        
+
+
+
+
+
+
+
+>>>>>>> 872a4ca3a1ff7022096c8679208f0678a6354777
     </ion-content>
 </ion-view>

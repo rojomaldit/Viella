@@ -2,6 +2,7 @@ angular.module('app.controllers', ['timer'])
 
 //CONTROLADOR DEL REPRODUCTOR   
 .controller('reproducirCtrl', function($scope) {
+<<<<<<< HEAD
   $scope.images = [];
 
 $scope.$on('$ionicView.afterEnter', function(){
@@ -56,6 +57,108 @@ $scope.loadImages = function(){
 		}
 	};
 }
+=======
+
+	document.addEventListener("deviceready", function() { 
+	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, firstFolder, null); 
+	}, false);
+
+		function firstFolder(fileSystemOne) { 
+	        var firstEntry = fileSystemOne.root; 
+	        firstEntry.getDirectory("Audiotica", {create: true, exclusive: false}, successOne, failOne); 
+	    }
+
+	    function successOne(dirOne) { 
+	    	console.log("Se a creado el directorio " + dirOne.name); 
+	    } 
+
+	    function failOne(errorOne) { 
+	        console.log("Error creando el directorio " + errorOne.code); 
+	    } 
+
+	document.addEventListener("deviceready", function() { 
+	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, secondFolder, null); ;
+	}, false);
+
+	    function secondFolder(fileSystemTwo) { 
+        var secondEntry = fileSystemTwo.root; 
+           	secondEntry.getDirectory("AudioticaMusic", {create: true, exclusive: false}, successTwo, failTwo); 
+        }
+
+        function successTwo(dirTwo) { 
+            console.log("Se a creado el directorio " + dirTwo.name); 
+        } 
+
+        function failTwo(errorTwo) { 
+            console.log("Error creando el directorio " + errorTwo.code); 
+        }
+
+	
+
+  $scope.status = 0;
+  var readMusicScss = function(entries){
+  	//str = JSON.stringify(entries, null, 4);	
+  	//alert(str);
+  	$scope.tracks = entries;
+    $scope.$apply();
+
+    
+  }
+
+  var readMusicFail = function(){
+  	// In case of error
+  }
+
+  $scope.musicFolder = function () {
+	  var myPath = cordova.file.externalRootDirectory + "/AudioticaMusic/";
+	  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+	    var directoryReader = dirEntry.createReader();
+	    directoryReader.readEntries(readMusicScss,readMusicFail);
+	  }); 
+  }
+
+
+  var readTracksScss = function(entries){
+    //str = JSON.stringify(entries, null, 4); 
+    //alert(str);
+    $scope.music = entries;
+    $scope.$apply();
+  }
+
+  var readTracksFail = function () {
+
+  }
+
+  var dirUrl;
+
+  $scope.openDir = function (dirName) {
+    dirUrl = cordova.file.externalRootDirectory + "/AudioticaMusic/" + dirName;
+    
+    window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
+      var directoryReader = dirEntry.createReader();
+      directoryReader.readEntries(readTracksScss,readMusicFail);
+    }); 
+    $scope.status = 1;
+  }
+
+
+  $scope.playMusic = function (fileName) {
+   
+      var track = new Media(dirUrl + "/" + fileName, function(e) { 
+      track.release();
+      }, function(err) {
+      });
+      track.play();
+  }
+
+	
+
+        
+
+    
+
+
+>>>>>>> 872a4ca3a1ff7022096c8679208f0678a6354777
 
 })
    

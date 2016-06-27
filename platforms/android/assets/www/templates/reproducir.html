@@ -38,10 +38,27 @@
             </div>                                  
         </div>
         -->
-        <button class="button button-full button-dark" ng-click="music()"> Actualizar </button>
-        <div class="item item-icon-left item-button-right" ng-repeat="m in tracks">
-                {{m.name}}
+        <button class="button button-full button-dark" ng-click="musicFolder()"> Actualizar </button>
+
+
+
+        <div class="item item-icon-left item-button-right" ng-click="openDir(t.name)" ng-repeat="t in tracks" ng-if="status==0">
+            {{t.name}}
         </div>
+
+        <div class="item item-icon-left item-button-right" ng-repeat="m in music" ng-if="status == 1">
+            {{m.name}}
+            <button class="button" ng-click="playMusic(m.name)">
+                 <i class="icon ion-ios-play dark"></i>
+            </button>
+            
+        </div>
+
+        
+
+
+
+
 
 
 
