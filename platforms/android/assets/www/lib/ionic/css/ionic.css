@@ -30,6 +30,80 @@
   font-weight: normal;
   font-style: normal; }
 
+#custom-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  background-image: url(../../../img/splash.png);
+}
+ 
+#custom-overlay img {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+  height: auto;
+  -webkit-animation: rotating-function 5.25s linear infinite;
+    -moz-animation: rotating-function 5.25s linear infinite;
+     -ms-animation: rotating-function 5.25s linear infinite;
+      -o-animation: rotating-function 5.25s linear infinite;
+         animation: rotating-function 5.25s linear infinite;
+}
+ 
+.custom-overlay  {
+ 
+}
+ 
+@-webkit-keyframes rotating-function {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+ 
+@-moz-keyframes rotating-function {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+  }
+}
+ 
+@-ms-keyframes rotating-function {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+  }
+}
+ 
+@-o-keyframes rotating-function {
+  from {
+    -o-transform: rotate(0deg);
+  }
+  to {
+    -o-transform: rotate(360deg);
+  }
+}
+ 
+@keyframes rotating-function {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #timer{
   font-family: 'Oswald', sans-serif;
   font-size: 53px;
@@ -3361,7 +3435,7 @@ body.grade-c {
   position: relative; }
 
 .scroll-content {
-  background-image: url(../../../img/fondo2.gif);
+  background-image: url(../../../img/fondo2.jpg);
   position: absolute;
   top: 0;
   right: 0;
@@ -5666,7 +5740,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
   padding: 16px;
   border-width: 1px;
   border-style: solid;
-  font-size: 16px; } /*tapa  11*/
+  font-size: 14px; } /*tapa  11*/
   .item h2 {
     margin: 0 0 2px 0;
     font-size: 16px;

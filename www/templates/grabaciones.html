@@ -6,16 +6,13 @@
             <input type="text">
             </label>
         </div> -->
-
         <label class="item item-input">
           <i class="icon ion-search placeholder-icon"></i>
-          <input type="search" placeholder="Buscar">
+          <input type="search" placeholder="Buscar" ng-model="buscar.name">
         </label>
+        <br>
         <ul class="list">
-            <div class="item item-divider">
-                Junio del 2016
-            </div>
-		    <div class="item item-icon-left item-button-right" ng-if="audioTracks!=0" ng-repeat="f in files">
+		    <div class="item item-icon-left item-button-right" ng-if="audioTracks!=0" ng-repeat="f in files | filter:buscar">
 		        <i class="icon ion-android-microphone assertive"></i>
        	        {{f.name}}
   		        <div class="buttons">

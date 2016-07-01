@@ -22,3 +22,58 @@ angular.module('app', ['ionic', 'app.controllers', 'app.routes', 'app.services',
     }
   });
 })
+
+.factory("$fileFactory", function($q) {
+
+    var File = function() { };
+
+    File.prototype = {
+        //obtengo todas las grabaciones de audio capturadas por el usuario
+        getEntries: function(path) {
+            var deferred = $q.defer();
+            window.resolveLocalFileSystemURI(path, function(fileSystem) {
+                var directoryReader = fileSystem.createReader();
+                directoryReader.readEntries(function(entries) {
+                    deferred.resolve(entries);
+                }, function(error) {
+                    deferred.reject(error);
+                });
+            }, function(error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        },
+        getAlbumCover: function(path) {
+            var albumPath = [];
+            var coverFormats = ["jpg","png", "jpeg", "bmp", "gif", "tiff"];
+            var deferred = $q.defer();
+            window.resolveLocalFileSystemURI(path, function(fileSystem) {
+                var directoryReader = fileSystem.createReader();
+                directoryReader.readEntries(function(entries) {
+                for (var k in entries){
+                    if (entries.hasOwnProperty(k) && entries[k].isFile == true ) {
+                        var extension = entries[k].name.split(".").pop();
+                        if((coverFormats.indexOf(extension)) != -1){
+                            albumPath[0] = entries[k].nativeURL;
+                            albumPath[1] = path;
+                            albumPath[2] = Object.keys(entries).length - 1;
+                        }
+                        else {
+                            albumPath[0] = "img/undefinedAlbum.jpg";
+                            albumPath[1] = path;
+                            albumPath[2] = Object.keys(entries).length;
+                        }
+                    }
+                }
+                    deferred.resolve(albumPath);
+                }, function(error) {
+                    deferred.reject(error);
+                });
+            }, function(error) {
+                deferred.reject(error);
+            });
+            return deferred.promise;
+        }
+    };
+    return File;
+});

@@ -131,6 +131,7 @@ Media.prototype.startRecord = function() {
     exec(null, this.errorCallback, "Media", "startRecordingAudio", [this.id, this.src]);
 };
 
+
 /**
  * Stop recording audio file.
  */

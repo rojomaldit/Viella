@@ -1,117 +1,180 @@
 angular.module('app.controllers', ['timer'])
 
-//CONTROLADOR DEL REPRODUCTOR   
-.controller('reproducirCtrl', function($scope) {
+//++++++++++++++++++++++++++++++++++++++++++++++++ CONTROLADOR DEL REPRODUCTOR +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	document.addEventListener("deviceready", function() { 
-	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, firstFolder, null); 
-	}, false);
-
-		function firstFolder(fileSystemOne) { 
-	        var firstEntry = fileSystemOne.root; 
-	        firstEntry.getDirectory("Audiotica", {create: true, exclusive: false}, successOne, failOne); 
-	    }
-
-	    function successOne(dirOne) { 
-	    	console.log("Se a creado el directorio " + dirOne.name); 
-	    } 
-
-	    function failOne(errorOne) { 
-	        console.log("Error creando el directorio " + errorOne.code); 
-	    } 
-
-	document.addEventListener("deviceready", function() { 
-	  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, secondFolder, null); ;
-	}, false);
-
-	    function secondFolder(fileSystemTwo) { 
-        var secondEntry = fileSystemTwo.root; 
-           	secondEntry.getDirectory("AudioticaMusic", {create: true, exclusive: false}, successTwo, failTwo); 
-        }
-
-        function successTwo(dirTwo) { 
-            console.log("Se a creado el directorio " + dirTwo.name); 
-        } 
-
-        function failTwo(errorTwo) { 
-            console.log("Error creando el directorio " + errorTwo.code); 
-        }
-
-	
-
+.controller('reproducirCtrl', function($scope, $ionicPlatform, $fileFactory) {
   $scope.status = 0;
-  var readMusicScss = function(entries){
-  	//str = JSON.stringify(entries, null, 4);	
-  	//alert(str);
-  	$scope.tracks = entries;
-    $scope.$apply();
+  $scope.images = [];
+  var lonelyTracks = [];
+  var size;
+  var my_media;
 
-    
+document.addEventListener("deviceready", function() {
+  var dirAlbums = [];
+  var imagesAlbums = [];  
+  var fs = new $fileFactory();
+  var dirUrl = cordova.file.externalRootDirectory + "/AudioticaMusic/";
+
+  screen.lockOrientation('portrait');
+  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, firstFolder, null);
+  window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, secondFolder, null); 
+
+  fs.getEntries(dirUrl).then(function(result) {
+
+    size = Object.keys(result).length;
+
+    for (var k in result){
+      if (result.hasOwnProperty(k) && result[k].isDirectory == true ) {
+        dirAlbums.push(result[k].nativeURL);
+      }
+      else if(result.hasOwnProperty(k) && result[k].isFile == true){
+        lonelyTracks.push(result[k].nativeURL);
+      }
+    }
+
+    for (var i = 0; i < dirAlbums.length; i++) {
+      fs.getAlbumCover(dirAlbums[i]).then(function(result) {
+        $scope.images.push({id:i, coverSrc:result[0], albumPath:result[1], trackCount: result[2]});
+        //$scope.$apply();
+      });      
+    }
+
+    //$scope.directories = result;
+    //$scope.$apply();
+  }); 
+}, false);
+
+
+function firstFolder(fileSystemOne) { 
+  var firstEntry = fileSystemOne.root; 
+  firstEntry.getDirectory("Audiotica", {create: true, exclusive: false}, successOne, failOne); 
+}
+
+function successOne(dirOne) { 
+  console.log("Se a creado el directorio " + dirOne.name); 
+} 
+
+function failOne(errorOne) { 
+  console.log("Error creando el directorio " + errorOne.code); 
+} 
+
+function secondFolder(fileSystemTwo) { 
+  var secondEntry = fileSystemTwo.root; 
+  secondEntry.getDirectory("AudioticaMusic", {create: true, exclusive: false}, successTwo, failTwo); 
+}
+
+function successTwo(dirTwo) { 
+  console.log("Se a creado el directorio " + dirTwo.name); 
+} 
+
+function failTwo(errorTwo) { 
+  console.log("Error creando el directorio " + errorTwo.code); 
+}
+
+//Reproduzco un audio grabado determinado
+var flag = true;
+$scope.playAudioTrack = function(fileUrl){
+  if(flag){
+    my_media = new Media(fileUrl, function(e) { 
+    my_media.release();
+    }, function(err) {
+      console.log("media err", err);
+    });
+    my_media.play();
+    flag=false;    
+  }
+  else{
+    console.log("No se pueden reproducir 2 temas al mismo tiempo");
+    my_media.stop();
+    flag=true;
   }
 
-  var readMusicFail = function(){
-  	// In case of error
+}
+
+//Freno la reproducción de un audio track
+$scope.stopAudioTrack = function(){
+  my_media.stop();
+  flag=true;
+}
+
+var onSuccessCallback = function(entries){
+  $scope.audioTracks = entries.length;
+  $scope.files = entries;
+  $scope.$apply();
+}
+
+var onFailCallback = function(){
+  // In case of error
+}
+
+var onResolveSuccess = function(fileEntry){
+  fileEntry.remove();
+  window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
+  var directoryReader = dirEntry.createReader();
+  directoryReader.readEntries(onSuccessCallback,onFailCallback);
+  });
+  window.plugins.toast.showWithOptions({
+  	message: "Se ha eliminado correctamente el Audio " + fileEntry.name,
+   	duration: 6000, // 5000 ms
+   	position: "top",
+   	styling: {
+   		opacity: 0.75, // 0.0 (transparent) to 1.0 (opaque). Default 0.8
+   		backgroundColor: '#333333', // make sure you use #RRGGBB. Default #333333
+   		textColor: '#FFFFFF', // Ditto. Default #FFFFFF
+   		textSize: 20.5, // Default is approx. 13.
+   		cornerRadius: 16, // minimum is 0 (square). iOS default 20, Android default 100
+   		horizontalPadding: 20, // iOS default 16, Android default 50
+   		verticalPadding: 16 // iOS default 12, Android default 30
+   	}
+	}); 
   }
 
-  $scope.musicFolder = function () {
-	  var myPath = cordova.file.externalRootDirectory + "/AudioticaMusic/";
-	  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
-	    var directoryReader = dirEntry.createReader();
-	    directoryReader.readEntries(readMusicScss,readMusicFail);
-	  }); 
+var fail = function(evt){
+  console.log(evt.target.error.code);
+}
+
+function onConfirmDltRecordedAudio(buttonIndex, fileUrl) {
+  if(buttonIndex == '1'){  //se confirma la eliminación del audio
+    window.resolveLocalFileSystemURL(fileUrl, onResolveSuccess, fail);
   }
+}
 
+//Elimino un audio track
+$scope.deleteAudioTrack = function(fileUrl){
+  navigator.notification.confirm(
+  '¿Desea eliminar este audio?',
+  function(buttonIndex){
+    onConfirmDltRecordedAudio(buttonIndex, fileUrl);
+  },
+  'Eliminando Audio',           
+  ['Aceptar','Cancelar']     
+  );
+}
 
-  var readTracksScss = function(entries){
-    //str = JSON.stringify(entries, null, 4); 
-    //alert(str);
-    $scope.music = entries;
-    $scope.$apply();
-  }
+var readTracksScss = function(entries){
+  $scope.music = entries;
+  $scope.$apply();
+}
 
-  var readTracksFail = function () {
+var readTracksFail = function () {
 
-  }
+}
 
-  var dirUrl;
-
-  $scope.openDir = function (dirName) {
-    dirUrl = cordova.file.externalRootDirectory + "/AudioticaMusic/" + dirName;
-    
-    window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
-      var directoryReader = dirEntry.createReader();
-      directoryReader.readEntries(readTracksScss,readMusicFail);
-    }); 
-    $scope.status = 1;
-  }
-
-
-  $scope.playMusic = function (fileName) {
-   
-      var track = new Media(dirUrl + "/" + fileName, function(e) { 
-      track.release();
-      }, function(err) {
-      });
-      track.play();
-  }
-
-	
-
-        
-
-    
-
-
+$scope.openDir = function (dirUrl) {
+  window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
+    var directoryReader = dirEntry.createReader();
+    directoryReader.readEntries(readTracksScss,readTracksFail);
+  });
+  $scope.status = 1;
+}
 
 })
    
-//CONTROLADOR DE GRABAR AUDIO     
+//++++++++++++++++++++++++++++++++++++++++++++++++++++ CONTROLADOR DE GRABAR AUDIO +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++     
 .controller('grabarAudioCtrl', function($scope, $ionicPopup) {
   $scope.state = "record";
   $scope.audioFormat = "wav";
   var audio;
-  
-
 
   $scope.start = function () {
     $scope.$broadcast('timer-start');
@@ -184,7 +247,7 @@ angular.module('app.controllers', ['timer'])
     	//var str = JSON.stringify(audio, null, 4);
     	$scope.state = "record";
     	window.plugins.toast.showWithOptions({
-    		message: "El audio capturado a sido agregado a la biblioteca de Grabaciones.",
+    		message: "El audio capturado ha sido agregado a la biblioteca de Grabaciones.",
     		duration: 5000, // 5000 ms
     		position: "top",
     		styling: {
@@ -199,29 +262,23 @@ angular.module('app.controllers', ['timer'])
   		});
 	}
 
-	
-
 })
 
-//CONTROLADOR DE LAS GRABACIONES   
-.controller('grabacionesCtrl', function($scope) {
+//+++++++++++++++++++++++++++++++++++++++++ CONTROLADOR DE LAS GRABACIONES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.controller('grabacionesCtrl', function($scope, $ionicPlatform, $fileFactory) {
+
+  var fs = new $fileFactory();
+  var path = cordova.file.externalRootDirectory + "/Audiotica/";
+  
+  fs.getEntries(path).then(function(result) {
+    $scope.audioTracks = result.length;
+    $scope.files = result;
+  });
 
   var my_media;
-  var onSuccessCallback = function(entries){
-    //var str = JSON.stringify(entries, null, 4);
-    $scope.files = entries;
-    $scope.$apply();
-  }
+      
 
-  var onFailCallback = function(){
-  // In case of error
-  }
-
-  var myPath = cordova.file.externalRootDirectory + "/Audiotica/";
-  window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
-    var directoryReader = dirEntry.createReader();
-    directoryReader.readEntries(onSuccessCallback,onFailCallback);
-  });      
 
   //Reproduzco un audio grabado determinado
   $scope.playRecordedAudio = function(name){
@@ -235,12 +292,13 @@ angular.module('app.controllers', ['timer'])
 
   var onResolveSuccess = function(fileEntry){
     fileEntry.remove();
-    window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
-    var directoryReader = dirEntry.createReader();
-    directoryReader.readEntries(onSuccessCallback,onFailCallback);
+    fs.getEntries(path).then(function(result) {
+      $scope.audioTracks = result.length;
+      $scope.files = result;
     });
+
     window.plugins.toast.showWithOptions({
-    	message: "Se a eliminado correctamente el Audio " + fileEntry.name,
+    	message: "Se ha eliminado correctamente el Audio " + fileEntry.name,
     	duration: 6000, // 5000 ms
     	position: "top",
     	styling: {

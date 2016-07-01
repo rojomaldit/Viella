@@ -7,19 +7,28 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-dialogs": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
-        "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.ionicframework.starter"
-        },
         "cordova-plugin-media": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
         "cordova-plugin-media-capture": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-x-toast": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
         "cordova-plugin-nativeaudio": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-screen-orientation": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         }
     },
