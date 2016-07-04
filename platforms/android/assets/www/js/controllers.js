@@ -2,7 +2,7 @@ angular.module('app.controllers', ['timer'])
 
 //++++++++++++++++++++++++++++++++++++++++++++++++ CONTROLADOR DEL REPRODUCTOR +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.controller('reproducirCtrl', function($scope, $ionicPlatform, $fileFactory) {
+.controller('reproducirCtrl', function($scope, $ionicPlatform, $fileFactory, sharedFlags) {
   $scope.status = 0;
   $scope.images = [];
   var lonelyTracks = [];
@@ -72,21 +72,21 @@ function failTwo(errorTwo) {
 }
 
 //Reproduzco un audio grabado determinado
-var flag = true;
+
 $scope.playAudioTrack = function(fileUrl){
-  if(flag){
+  if(sharedFlags.getFlag()){
     my_media = new Media(fileUrl, function(e) { 
     my_media.release();
     }, function(err) {
       console.log("media err", err);
     });
     my_media.play();
-    flag=false;    
+    sharedFlags.setFlag(false); 
   }
   else{
     console.log("No se pueden reproducir 2 temas al mismo tiempo");
     my_media.stop();
-    flag=true;
+    sharedFlags.setFlag(true);
   }
 
 }
@@ -94,7 +94,7 @@ $scope.playAudioTrack = function(fileUrl){
 //Freno la reproducción de un audio track
 $scope.stopAudioTrack = function(){
   my_media.stop();
-  flag=true;
+  sharedFlags.setFlag(true);
 }
 
 var onSuccessCallback = function(entries){
