@@ -4,8 +4,6 @@
             <div class="list card">
                 <div class="item item-avatar">
                   <img src="img/avatar1.png">
- 
-
                   <h2>Formato de Audio Actual: {{audioFormat | uppercase}}</h2>
                   <p>Puede cambiarlo en preferencias.</p>
                 </div>
@@ -13,26 +11,24 @@
                   <img id="recordImage" src="img/wave.png">
                 </div>
                 <div class="item item-image">
-                <ion-spinner ng-if="state == 'recording'" icon="lines" class="spinner-assertive"></ion-spinner>
-                
-                <h3 ng-if="state == 'recording'" id="timer"><timer interval="1000">{{hhours}} : {{mminutes}} : {{sseconds}} </timer></h3>
 
+                <!--<ion-spinner ng-if="state == 'recording'" icon="lines" class="spinner-assertive"></ion-spinner>-->
+                <div ng-if="state == 'recording'" class="item item-image">
+                  <img id="recordImage" src="img/grabando.png">
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <h3 ng-if="state == 'recording'" id="timer"><timer interval="1000">{{hhours}} : {{mminutes}} : {{sseconds}} </timer></h3>
   				      </div>
                 <div class="item item-image">
                     <div class="button-bar">
                       <button id="grabarAudio-button8" ng-if="state == 'record' || state == 'finish' " class="button button-dark  button-block icon ion-android-microphone " ng-click="capturarAudio()"></button>
                       <button id="grabarAudio-button8" ng-if="state == 'record' || state == 'finish' " class="button button-dark  button-block icon ion-gear-a" ng-click="formatos()"></button>
-
-
-                      <!--<button id="grabarAudio-button8" ng-if="state == 'finish'" class="button button-dark  button-block icon ion-play" ng-click="reproducirAudio()"></button> -->
-
                       <button id="grabarAudio-button10" ng-if="state == 'recording'" class="button button-dark  button-block icon ion-stop" ng-click="pararAudio()"></button>
                     </div>
                 </div>
-               
-
-
             </div>
-
     </ion-content>
 </ion-view>

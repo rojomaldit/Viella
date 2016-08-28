@@ -4,14 +4,7 @@ angular.module('app.services', [])
 
 }])
 
-.service('sharedFlags', [function(){
-	var flag = true;
-	this.getFlag = function () {
-		return flag;
-	}
+.service('BlankService', [function(){
 
-	this.setFlag = function (value) {
-		flag = value;
-	}
 }]);
 

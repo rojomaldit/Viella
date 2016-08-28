@@ -30,79 +30,38 @@
   font-weight: normal;
   font-style: normal; }
 
-#custom-overlay {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;  
+
+
+.float-button {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  width: 30px;
+  padding: 30px;
+  font-size: 40px;
+  background: $warning;
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  bottom: 20px; /* Adjust to where you want it */
+  right: 20px; /* Adjust to where you want it */
+  z-index: 9999;
+}
+
+.float-button .height_fix {
+  margin-top: 100%;
+}
+
+.float-button .content {
+  position: absolute;
   left: 0;
-  z-index: 100;
-  background-image: url(../../../img/splash.png);
+  top: 50%;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  margin-top: -20px; /* Note, this must be half the font size */
+  color: $light;
 }
- 
-#custom-overlay img {
-  display: block;
-  margin: 0 auto;
-  width: 50%;
-  height: auto;
-  -webkit-animation: rotating-function 5.25s linear infinite;
-    -moz-animation: rotating-function 5.25s linear infinite;
-     -ms-animation: rotating-function 5.25s linear infinite;
-      -o-animation: rotating-function 5.25s linear infinite;
-         animation: rotating-function 5.25s linear infinite;
-}
- 
-.custom-overlay  {
- 
-}
- 
-@-webkit-keyframes rotating-function {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
- 
-@-moz-keyframes rotating-function {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
- 
-@-ms-keyframes rotating-function {
-  from {
-    -ms-transform: rotate(0deg);
-  }
-  to {
-    -ms-transform: rotate(360deg);
-  }
-}
- 
-@-o-keyframes rotating-function {
-  from {
-    -o-transform: rotate(0deg);
-  }
-  to {
-    -o-transform: rotate(360deg);
-  }
-}
- 
-@keyframes rotating-function {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+
+
 
 #timer{
   font-family: 'Oswald', sans-serif;
@@ -4236,7 +4195,9 @@ a.subdued {
     font-size: 17px; }
   .bar-positive .button.button-icon {
     border-color: transparent;
-    background: none; }
+    background: none;
+    text-shadow: #000 0.5px 2px 2px;
+    }
 
 .bar-calm .button {
   border-color: transparent;
@@ -7483,7 +7444,9 @@ ion-slides {
   fill: #444;
   }
   .spinner svg {
-    width: 52% !important;
+    width: 10% !important;
+    height: 10% !important;
+    margin-left: -40px;
     /*height: 285px !important;*/
 
   }

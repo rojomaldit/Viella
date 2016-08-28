@@ -30,6 +30,12 @@
         },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.proa.audiotica"
         }
     },
     "dependent_plugins": {

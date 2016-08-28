@@ -1,19 +1,32 @@
+
 angular.module('app.controllers', ['timer'])
 
 //++++++++++++++++++++++++++++++++++++++++++++++++ CONTROLADOR DEL REPRODUCTOR +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-.controller('reproducirCtrl', function($scope, $ionicPlatform, $fileFactory, sharedFlags) {
+.controller('reproducirCtrl', function($scope, $ionicPlatform, $fileFactory, $ionicPopup) {
   $scope.status = 0;
+  $scope.isPlaying = false;
+  $scope.trackStatus = 1;
+  $scope.toggleStatus = 0;
   $scope.images = [];
+  $scope.cover = "";
+  $scope.currentPosition = -1;
+  $scope.currentName = "Reproducir";
+
+  var my_media;
   var lonelyTracks = [];
   var size;
-  var my_media;
+  var flag = true;
+  var mode = false; //representa secuencial
+
+  
 
 document.addEventListener("deviceready", function() {
   var dirAlbums = [];
   var imagesAlbums = [];  
   var fs = new $fileFactory();
   var dirUrl = cordova.file.externalRootDirectory + "/AudioticaMusic/";
+
 
   screen.lockOrientation('portrait');
   window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, firstFolder, null);
@@ -23,24 +36,23 @@ document.addEventListener("deviceready", function() {
 
     size = Object.keys(result).length;
 
+    $scope.audioDirs = size;
+
     for (var k in result){
-      if (result.hasOwnProperty(k) && result[k].isDirectory == true ) {
+      if (result.hasOwnProperty(k) && result[k].isDirectory) {
         dirAlbums.push(result[k].nativeURL);
       }
-      else if(result.hasOwnProperty(k) && result[k].isFile == true){
+      else if(result.hasOwnProperty(k) && result[k].isFile){
         lonelyTracks.push(result[k].nativeURL);
       }
     }
 
+
     for (var i = 0; i < dirAlbums.length; i++) {
       fs.getAlbumCover(dirAlbums[i]).then(function(result) {
-        $scope.images.push({id:i, coverSrc:result[0], albumPath:result[1], trackCount: result[2]});
-        //$scope.$apply();
+        $scope.images.push({id:i, coverSrc:result[0], albumPath:result[1], trackCount:result[2]});
       });      
     }
-
-    //$scope.directories = result;
-    //$scope.$apply();
   }); 
 }, false);
 
@@ -73,33 +85,154 @@ function failTwo(errorTwo) {
 
 //Reproduzco un audio grabado determinado
 
-$scope.playAudioTrack = function(fileUrl){
-  if(sharedFlags.getFlag()){
+$scope.playAudioTrack = function(fileUrl,fileName){
+  $scope.trackStatus = 1;
+  $scope.currentPosition = $scope.tracksPositions.indexOf(fileUrl);
+
+
+  if(flag){
     my_media = new Media(fileUrl, function(e) { 
-    my_media.release();
     }, function(err) {
       console.log("media err", err);
     });
     my_media.play();
-    sharedFlags.setFlag(false); 
+    flag=false;
+
+    //document.getElementById("nombre").innerHTML = fileName;
+    //document.getElementById("page2").setAttribute("title", "asdfsd");
+
+    $scope.currentName = fileName;
+    
+    // Update media position every second
+    var mediaTimer = setInterval(function () {
+    my_media.getCurrentPosition(
+        // success callback
+        function (position) {
+            if (position <= -0.0001) {
+                $scope.nextTrack();
+            }
+        },
+        // error callback
+        function (e) {
+            alert("Error getting pos=" + e);
+        }
+    );
+    }, 1000); 
+
+
+  
   }
   else{
     console.log("No se pueden reproducir 2 temas al mismo tiempo");
     my_media.stop();
-    sharedFlags.setFlag(true);
+    my_media.release();
+    flag = true;
+    $scope.playAudioTrack(fileUrl,fileName);
   }
 
 }
 
+$scope.backTrack = function(){
+	my_media.stop();
+	flag = true;
+	if( $scope.currentPosition != 0){
+		$scope.currentPosition = $scope.currentPosition - 1;
+	}
+	else{
+		$scope.currentPosition = $scope.tracksPositions.length - 1;
+	}
+
+	$scope.playAudioTrack($scope.tracksPositions[$scope.currentPosition],$scope.tracksPositionsNames[$scope.currentPosition]);
+}
+
+$scope.nextTrack = function(fileName){
+	my_media.stop();
+	flag = true;
+  if(!mode){
+    if($scope.currentPosition != ($scope.tracksPositions.length) - 1){
+      $scope.currentPosition = $scope.currentPosition + 1;
+    }
+    else{
+      $scope.currentPosition = 0;
+    }
+  }
+  else{
+    $scope.currentPosition = Math.floor(Math.random() * $scope.tracksPositions.length);
+  }
+
+  $scope.setSequential = function(){
+    mode = false;
+    $scope.toggleStatus = 0;
+  }
+
+  $scope.setRandom = function(){
+    mode = true;
+    $scope.toggleStatus = 1;
+  }  
+	$scope.playAudioTrack($scope.tracksPositions[$scope.currentPosition],$scope.tracksPositionsNames[$scope.currentPosition]);
+}
+
+
 //Freno la reproducción de un audio track
-$scope.stopAudioTrack = function(){
-  my_media.stop();
-  sharedFlags.setFlag(true);
+$scope.pauseAudioTrack = function(){
+  $scope.trackStatus = 0;
+  my_media.pause();
+  flag=true;
+}
+
+$scope.resumeAudioTrack = function(){
+  $scope.trackStatus = 1;
+  my_media.play();
+  flag=true;
+}
+
+$scope.backAlbums = function(){
+  $scope.status = 0;
+  $scope.$apply();
+}
+
+
+$scope.setRandom = function(){
+  $scope.toggleStatus = 1;
+}
+
+$scope.setSequential = function(){
+  $scope.toggleStatus = 0;
+}
+
+
+$scope.info = function(){
+   var alertPopup = $ionicPopup.alert({
+     title: 'Información del sistema',
+     okText:'Cerrar',
+     template:'<h6>Música:' + "AudioticaMusic (en SDcard)" + '</h6>' +  '<h6>Grabaciones:' + "Audiotica (en SDcard)" +'</h6>' +'<h6>Versión Audiotica :' + '0.100001' + '</h6>' + '<h6>Modelo equipo:'+ device.model +'</h6>' + '<h6>Plataforma equipo:'+ device.platform +'</h6>' + '<h6>Android equipo:'+ device.version +'</h6>' +'<h6>Fabricante equipo:'+ device.manufacturer +'</h6>' + '<h6>Audiotica es un proyecto educativo realizado por 6to año de la escuela experimental Proa Córdoba Capital - Argentina. </h6>' 
+   });
+}
+
+
+var tracksOptionTemplate = '<div class="list"><a class="item item-icon-left" href="#"><i class="icon ion-trash-b"></i>Eliminar</a><a class="item item-icon-left" href="#"><i class="icon ion-clipboard"></i>Detalles</a></div>';
+$scope.trackOptions = function(fileUrl){
+   var alertPopup = $ionicPopup.alert({
+     title: 'Opciones',
+     okText:'Cerrar',
+     template:tracksOptionTemplate
+   });
 }
 
 var onSuccessCallback = function(entries){
+  //var str = JSON.stringify(entries, null, 4);
   $scope.audioTracks = entries.length;
-  $scope.files = entries;
+  var coverFormats = ["jpg","png", "jpeg", "bmp", "gif", "tiff"];
+  for (var k in entries){
+    if (entries.hasOwnProperty(k) && entries[k].isFile) {
+      var extension = entries[k].name.split(".").pop();
+      if((coverFormats.indexOf(extension)) != -1){
+        delete entries[k];
+      }
+    }
+  }
+
+  $scope.music = entries;
   $scope.$apply();
 }
 
@@ -108,26 +241,32 @@ var onFailCallback = function(){
 }
 
 var onResolveSuccess = function(fileEntry){
+  var fileUrl = fileEntry.nativeURL;
+  var n = fileUrl.lastIndexOf("/");
+  var fileDir = fileUrl.substring(0,n);
   fileEntry.remove();
-  window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
-  var directoryReader = dirEntry.createReader();
-  directoryReader.readEntries(onSuccessCallback,onFailCallback);
+
+  window.resolveLocalFileSystemURL(fileDir, function (dirEntry) {
+    var directoryReader = dirEntry.createReader();
+    directoryReader.readEntries(onSuccessCallback,onFailCallback);
   });
+
   window.plugins.toast.showWithOptions({
-  	message: "Se ha eliminado correctamente el Audio " + fileEntry.name,
-   	duration: 6000, // 5000 ms
-   	position: "top",
-   	styling: {
-   		opacity: 0.75, // 0.0 (transparent) to 1.0 (opaque). Default 0.8
-   		backgroundColor: '#333333', // make sure you use #RRGGBB. Default #333333
-   		textColor: '#FFFFFF', // Ditto. Default #FFFFFF
-   		textSize: 20.5, // Default is approx. 13.
-   		cornerRadius: 16, // minimum is 0 (square). iOS default 20, Android default 100
-   		horizontalPadding: 20, // iOS default 16, Android default 50
-   		verticalPadding: 16 // iOS default 12, Android default 30
-   	}
-	}); 
-  }
+    message: "Se ha eliminado correctamente el audio " + fileEntry.name,
+    duration: 6000, // 5000 ms
+    position: "top",
+    styling: {
+      opacity: 0.75, // 0.0 (transparent) to 1.0 (opaque). Default 0.8
+      backgroundColor: '#333333', // make sure you use #RRGGBB. Default #333333
+      textColor: '#FFFFFF', // Ditto. Default #FFFFFF
+      textSize: 20.5, // Default is approx. 13.
+      cornerRadius: 16, // minimum is 0 (square). iOS default 20, Android default 100
+      horizontalPadding: 20, // iOS default 16, Android default 50
+      verticalPadding: 16 // iOS default 12, Android default 30
+    }
+  }) 
+
+}
 
 var fail = function(evt){
   console.log(evt.target.error.code);
@@ -146,13 +285,35 @@ $scope.deleteAudioTrack = function(fileUrl){
   function(buttonIndex){
     onConfirmDltRecordedAudio(buttonIndex, fileUrl);
   },
-  'Eliminando Audio',           
+  'Eliminando audio',           
   ['Aceptar','Cancelar']     
   );
 }
 
 var readTracksScss = function(entries){
+  /*var str = JSON.stringify(entries, null, 4);
+  alert(str);*/
+  var tracks = [];
+  var tracksNames = [];
+  var index = 0;
+  var coverFormats = ["jpg","png", "jpeg", "bmp", "gif", "tiff"];
+  for (var k in entries){
+    if (entries.hasOwnProperty(k) && entries[k].isFile) {
+      var extension = entries[k].name.split(".").pop();
+      if((coverFormats.indexOf(extension)) == -1){
+        tracks[index] = entries[k].nativeURL;
+        tracksNames[index] = entries[k].name;
+        index++;
+      }
+      else{
+        delete entries[k];
+      }
+    }
+  }
+
   $scope.music = entries;
+  $scope.tracksPositions = tracks;
+  $scope.tracksPositionsNames = tracksNames;
   $scope.$apply();
 }
 
@@ -160,12 +321,16 @@ var readTracksFail = function () {
 
 }
 
-$scope.openDir = function (dirUrl) {
+$scope.openDir = function (dirUrl,cover) {
   window.resolveLocalFileSystemURL(dirUrl, function (dirEntry) {
     var directoryReader = dirEntry.createReader();
     directoryReader.readEntries(readTracksScss,readTracksFail);
   });
+  $scope.cover = cover;
+
+
   $scope.status = 1;
+
 }
 
 })
@@ -202,7 +367,7 @@ $scope.openDir = function (dirUrl) {
     // Popup para seleccionar formáto de grabación
     var myPopup = $ionicPopup.show({
       template: prueba,
-      title: 'Seleccione Formato de Grabación',
+      title: 'Seleccione formato de grabación',
       subTitle: 'Recuerde comprobar la compatibilidad de su equipo móvil (Por defecto se recomienda Wav)',
       scope: $scope,
       buttons: [
@@ -212,7 +377,7 @@ $scope.openDir = function (dirUrl) {
           type: 'button-assertive',
           onTap: function(e) {
             for (var k in $scope.devList){
-              if ($scope.devList.hasOwnProperty(k) && $scope.devList[k].checked == true ) {
+              if ($scope.devList.hasOwnProperty(k) && $scope.devList[k].checked ) {
                 $scope.audioFormat = $scope.devList[k].text;
               }
             }
@@ -247,7 +412,7 @@ $scope.openDir = function (dirUrl) {
     	//var str = JSON.stringify(audio, null, 4);
     	$scope.state = "record";
     	window.plugins.toast.showWithOptions({
-    		message: "El audio capturado ha sido agregado a la biblioteca de Grabaciones.",
+    		message: "El audio capturado ha sido agregado a la biblioteca de grabaciones.",
     		duration: 5000, // 5000 ms
     		position: "top",
     		styling: {
@@ -298,7 +463,7 @@ $scope.openDir = function (dirUrl) {
     });
 
     window.plugins.toast.showWithOptions({
-    	message: "Se ha eliminado correctamente el Audio " + fileEntry.name,
+    	message: "Se ha eliminado correctamente el audio " + fileEntry.name,
     	duration: 6000, // 5000 ms
     	position: "top",
     	styling: {
@@ -340,5 +505,31 @@ $scope.openDir = function (dirUrl) {
     ['Aceptar','Cancelar']     
     );
   }
+
+  // this is the complete list of currently supported params you can pass to the plugin (all optional)
+  var options = {
+    message: 'Compartir esto', // not supported on some apps (Facebook, Instagram)
+    subject: 'Asunto', // fi. for email
+    files: ['', ''], // an array of filenames either locally or remotely
+    url: 'https://www.website.com/foo/#bar?a=b',
+    chooserTitle: 'Seleccionar servicio' // Android only, you can override the default share sheet title
+  }
+
+  var onSuccessShare = function(result) {
+    alert("Envio completado? " + result.completed); // On Android apps mostly return false even while it's true
+    alert("Enviado al servicio: " + result.app); // On Android result.app is currently empty. On iOS it's empty when sharing is cancelled (result.completed=false)
+  }
+
+  var onErrorShare = function(msg) {
+    alert("Sharing failed with message: " + msg);
+  }
+
+  
+
+  $scope.shareAudio = function(name,nativeURL){
+    //window.plugins.socialsharing.shareWithOptions(options, onSuccessShare, onErrorShare);
+    window.plugins.socialsharing.share('Acá está tu grabación', name, nativeURL);
+  }
+
 })
        
